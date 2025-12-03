@@ -55,19 +55,13 @@ COPY upload/php.ini ${PHP_INI_DIR}
 # Enable rewrite
 RUN a2enmod rewrite
 
-# Permissions
-RUN chown -R www-data:www-data ${DIR_STORAGE} \
-    && chmod -R 555 ${DIR_OPENCART} \
-    && chmod -R 666 ${DIR_STORAGE} \
-    && chmod 555 ${DIR_STORAGE} \
-    && chmod -R 555 ${DIR_STORAGE}vendor \
-    && chmod 755 ${DIR_LOGS} \
-    && chmod -R 644 ${DIR_LOGS}* \
-    && chown -R www-data:www-data ${DIR_IMAGE} \
-    && chmod -R 744 ${DIR_IMAGE} \
-    && chmod -R 755 ${DIR_CACHE} \
-    && chmod -R 666 ${DIR_DOWNLOAD} \
-    && chmod -R 666 ${DIR_SESSION} \
-    && chmod -R 666 ${DIR_UPLOAD}
+# PHP extensions
+RUN apt-get install -y \
+    libfreetype6-dev \
+    libjpeg62-turbo-dev \
+    libpng-dev \
+    libzip-dev \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j"$(nproc)" gd zip mysqli
 
 CMD ["apache2-foreground"]
