@@ -22,10 +22,7 @@ RUN apt-get install -y \
     libpng-dev \
     libzip-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(nproc)" gd \
-    && docker-php-ext-install zip \
-    && docker-php-ext-enable zip \
-    && docker-php-ext-enable mysqli
+    && docker-php-ext-install -j"$(nproc)" gd zip mysqli
 
 # Storage folders
 RUN mkdir /storage && mkdir /opencart
@@ -54,14 +51,5 @@ COPY upload/php.ini ${PHP_INI_DIR}
 
 # Enable rewrite
 RUN a2enmod rewrite
-
-# PHP extensions
-RUN apt-get install -y \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libzip-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(nproc)" gd zip mysqli
 
 CMD ["apache2-foreground"]
