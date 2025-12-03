@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ds>
+  <nhanvien manv="nv01">
+    <hoten>
+      <ho>Giàng Seo</ho>
+      <ten>Chính</ten>
+    </hoten>
+    <diachi>123 Nguyễn Hoàng, Hà Nội</diachi>
+  </nhanvien>
+  <nhanvien manv="nv03">
+    <hoten>
+      <ho>Giàng Seo ca</ho>
+      <ten>Chính</ten>
+    </hoten>
+    <diachi>123 Nguyễn Hoàng, Hà Nội</diachi>
+  </nhanvien>
+  <nhanvien manv="nv04">
+    <hoten>
+      <ho>Giàng Seo</ho>
+      <ten>Chính chit</ten>
+    </hoten>
+    <diachi>123 Nguyễn Hoàng, Hà Nội</diachi>
+  </nhanvien>
+  <nhanvien manv="nv05">
+    <hoten>
+      <ho>Giàng Seo ca</ho>
+      <ten>Chính</ten>
+    </hoten>
+    <diachi>123 Nguyễn Hoàng, Hà Nội</diachi>
+  </nhanvien>
+  <nhanvien manv="nv06">
+    <hoten>
+      <ho>Giàng Seo</ho>
+      <ten>Chính</ten>
+    </hoten>
+    <diachi>123 Nguyễn Hoàng, Hà Nội</diachi>
+  </nhanvien>
+  <nhanvien manv="">
+    <hoten>
+      <ho>
+      </ho>
+      <ten>
+      </ten>
+    </hoten>
+    <diachi>
+    </diachi>
+  </nhanvien>
+</ds>

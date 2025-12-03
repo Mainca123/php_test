@@ -1,0 +1,12 @@
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\bin\Debug\TX2.exe.config
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\bin\Debug\TX2.exe
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\bin\Debug\TX2.pdb
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.csproj.AssemblyReference.cache
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.Form1.resources
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.Properties.Resources.resources
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.csproj.GenerateResource.cache
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.csproj.CoreCompileInputs.cache
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.exe
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.pdb
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.exe.config
+D:\DocumentOnClass\2025_2026\Ky_1\TichHopHeThong\TX2\TX2\obj\Debug\TX2.Form2.resources
