@@ -33,7 +33,7 @@ RUN mv ${DIR_OPENCART}/system/storage/* ${DIR_STORAGE}/
 
 # --- Copy configs & PHP settings ---
 COPY configs/ ${DIR_OPENCART}/
-COPY php.ini ${PHP_INI_DIR}
+COPY upload/php.ini ${PHP_INI_DIR}
 
 # --- Enable Apache rewrite ---
 RUN a2enmod rewrite
