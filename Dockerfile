@@ -1,54 +1,69 @@
 FROM php:8.2.11-apache
 
+# Cho phép truyền URL custom nếu muốn
 ARG DOWNLOAD_URL
-ARG FOLDER
 
-ENV DIR_OPENCART="/var/www/html/"
-ENV DIR_STORAGE="/storage/"
-ENV DIR_IMAGE="${DIR_OPENCART}image/"
+ENV DIR_OPENCART="/var/www/html"
+ENV DIR_STORAGE="/storage"
+ENV DIR_IMAGE="${DIR_OPENCART}/image"
 
-# Basic packages
-RUN apt-get clean && apt-get update && apt-get install -y unzip vim curl
+# Cài package cần thiết
+RUN set -eux; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+        unzip \
+        curl \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libpng-dev \
+        libzip-dev; \
+    rm -rf /var/lib/apt/lists/*
 
-# PHP extensions (gd, zip, mysqli)
-RUN apt-get install -y \
-    libfreetype6-dev \
-    libjpeg62-turbo-dev \
-    libpng-dev \
-    libzip-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j"$(nproc)" gd zip mysqli
+# Cài extension PHP
+RUN set -eux; \
+    docker-php-ext-configure gd --with-freetype --with-jpeg; \
+    docker-php-ext-install -j"$(nproc)" gd zip mysqli
 
-# Storage folders
-RUN mkdir -p /storage && mkdir -p /opencart
+# Tạo thư mục
+RUN mkdir -p "${DIR_STORAGE}" /opencart
 
-# Download OpenCart (latest version or DOWNLOAD_URL)
-RUN if [ -z "$DOWNLOAD_URL" ]; then \
-        curl -Lo /tmp/opencart.zip $(curl -s https://api.github.com/repos/opencart/opencart/releases/latest \
-        | grep "browser_download_url" | cut -d : -f 2,3 | tr -d "\""); \
+# -------------------------------
+# TẢI OPENCART (ĐÃ FIX curl)
+# -------------------------------
+RUN set -eux; \
+    if [ -z "$DOWNLOAD_URL" ]; then \
+        OC_URL=$(curl -s https://api.github.com/repos/opencart/opencart/releases/latest \
+            | grep browser_download_url \
+            | grep upload.zip \
+            | head -n1 \
+            | cut -d '"' -f 4); \
+        echo "Downloading OpenCart from: ${OC_URL}"; \
+        curl -L -o /tmp/opencart.zip "${OC_URL}"; \
     else \
-        curl -Lo /tmp/opencart.zip ${DOWNLOAD_URL}; \
-    fi
+        echo "Downloading OpenCart from custom URL: ${DOWNLOAD_URL}"; \
+        curl -L -o /tmp/opencart.zip "${DOWNLOAD_URL}"; \
+    fi; \
+    unzip /tmp/opencart.zip -d /tmp/opencart; \
+    UPLOAD_DIR=$(find /tmp/opencart -maxdepth 1 -type d -name "opencart-*"); \
+    echo "Using upload dir: ${UPLOAD_DIR}"; \
+    # Xóa file mặc định trong /var/www/html cho sạch
+    rm -rf "${DIR_OPENCART:?}/"*; \
+    # Move mã nguồn OpenCart vào webroot
+    mv "${UPLOAD_DIR}/upload/"* "${DIR_OPENCART}/"; \
+    # Xóa thư mục cài đặt (install)
+    rm -rf /tmp/opencart /tmp/opencart.zip "${DIR_OPENCART}/install"
 
-# Extract OpenCart
-RUN unzip /tmp/opencart.zip -d /tmp/opencart
-
-# Move upload folder into web root
-RUN mv /tmp/opencart/$(if [ -n "$FOLDER" ]; then echo $FOLDER; \
-        else unzip -l /tmp/opencart.zip | awk '{print $4}' | grep -E 'opencart-[0-9\.]+/upload/$'; \
-        fi)* ${DIR_OPENCART}
-
-# Clean installer (OpenCart 4.x)
-RUN rm -rf /tmp/opencart.zip /tmp/opencart ${DIR_OPENCART}install
-
-# OpenCart 4.x does NOT have system/storage — skip move
-RUN echo "OpenCart 4.x detected — skipping move storage step"
-
-# Copy your config + php.ini
-COPY configs ${DIR_OPENCART}
-COPY upload/php.ini ${PHP_INI_DIR}
-
-# Enable mod_rewrite for SEO URLs
+# Bật mod_rewrite (SEO URL)
 RUN a2enmod rewrite
 
+# Copy config của bạn (nếu có)
+# Thư mục configs phải tồn tại trong project của bạn
+COPY configs/ "${DIR_OPENCART}/"
+
+# Copy php.ini custom (nếu có)
+# File upload/php.ini phải tồn tại trong project
+COPY upload/php.ini "${PHP_INI_DIR}/conf.d/opencart.ini"
+
+# Mặc định php:apache đã có CMD này,
+# nhưng mình ghi rõ cho dễ đọc
 CMD ["apache2-foreground"]
