@@ -1,0 +1,100 @@
+2025-12-03 19:37:56 - Error: Error: Table 'opencart.oc_setting' doesn't exist<br/>Error No: 1146<br/>SELECT * FROM `oc_setting` WHERE `store_id` = '0' OR `store_id` = '0' ORDER BY `store_id` ASC
+File: /var/www/html/system/library/db/mysqli.php
+Line: 122
+
+Backtrace: 0
+File: /var/www/html/system/library/db.php
+Line: 54
+Class: Opencart\System\Library\DB\MySQLi
+Function: query
+
+Backtrace: 1
+File: /var/www/html/admin/model/setting/setting.php
+Line: 27
+Class: Opencart\System\Library\DB
+Function: query
+
+Backtrace: 2
+File: /var/www/html/system/engine/loader.php
+Line: 343
+Class: Opencart\Admin\Model\Setting\Setting
+Function: getSettings
+
+Backtrace: 3
+File: /var/www/html/system/engine/proxy.php
+Line: 87
+Class: Opencart\System\Engine\Loader
+Function: Opencart\System\Engine\{closure}
+
+Backtrace: 4
+File: /var/www/html/admin/controller/startup/setting.php
+Line: 18
+Class: Opencart\System\Engine\Proxy
+Function: __call
+
+Backtrace: 5
+File: /var/www/html/system/engine/action.php
+Line: 96
+Class: Opencart\Admin\Controller\Startup\Setting
+Function: index
+
+Backtrace: 6
+File: /var/www/html/system/framework.php
+Line: 208
+Class: Opencart\System\Engine\Action
+Function: execute
+
+Backtrace: 7
+File: /var/www/html/admin/index.php
+Line: 20
+Function: require_once
+2025-12-03 19:38:00 - Error: Error: Table 'opencart.oc_setting' doesn't exist<br/>Error No: 1146<br/>SELECT * FROM `oc_setting` WHERE `store_id` = '0' OR `store_id` = '0' ORDER BY `store_id` ASC
+File: /var/www/html/system/library/db/mysqli.php
+Line: 122
+
+Backtrace: 0
+File: /var/www/html/system/library/db.php
+Line: 54
+Class: Opencart\System\Library\DB\MySQLi
+Function: query
+
+Backtrace: 1
+File: /var/www/html/admin/model/setting/setting.php
+Line: 27
+Class: Opencart\System\Library\DB
+Function: query
+
+Backtrace: 2
+File: /var/www/html/system/engine/loader.php
+Line: 343
+Class: Opencart\Admin\Model\Setting\Setting
+Function: getSettings
+
+Backtrace: 3
+File: /var/www/html/system/engine/proxy.php
+Line: 87
+Class: Opencart\System\Engine\Loader
+Function: Opencart\System\Engine\{closure}
+
+Backtrace: 4
+File: /var/www/html/admin/controller/startup/setting.php
+Line: 18
+Class: Opencart\System\Engine\Proxy
+Function: __call
+
+Backtrace: 5
+File: /var/www/html/system/engine/action.php
+Line: 96
+Class: Opencart\Admin\Controller\Startup\Setting
+Function: index
+
+Backtrace: 6
+File: /var/www/html/system/framework.php
+Line: 208
+Class: Opencart\System\Engine\Action
+Function: execute
+
+Backtrace: 7
+File: /var/www/html/admin/index.php
+Line: 20
+Function: require_once
