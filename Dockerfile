@@ -5,17 +5,12 @@ ARG FOLDER
 
 ENV DIR_OPENCART="/var/www/html/"
 ENV DIR_STORAGE="/storage/"
-ENV DIR_CACHE="${DIR_STORAGE}cache/"
-ENV DIR_DOWNLOAD="${DIR_STORAGE}download/"
-ENV DIR_LOGS="${DIR_STORAGE}logs/"
-ENV DIR_SESSION="${DIR_STORAGE}session/"
-ENV DIR_UPLOAD="${DIR_STORAGE}upload/"
 ENV DIR_IMAGE="${DIR_OPENCART}image/"
 
 # Basic packages
-RUN apt-get clean && apt-get update && apt-get install -y unzip vim
+RUN apt-get clean && apt-get update && apt-get install -y unzip vim curl
 
-# PHP extensions
+# PHP extensions (gd, zip, mysqli)
 RUN apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
@@ -25,11 +20,12 @@ RUN apt-get install -y \
     && docker-php-ext-install -j"$(nproc)" gd zip mysqli
 
 # Storage folders
-RUN mkdir /storage && mkdir /opencart
+RUN mkdir -p /storage && mkdir -p /opencart
 
-# Download OpenCart (latest release or custom URL)
+# Download OpenCart (latest version or DOWNLOAD_URL)
 RUN if [ -z "$DOWNLOAD_URL" ]; then \
-        curl -Lo /tmp/opencart.zip $(sh -c 'curl -s https://api.github.com/repos/opencart/opencart/releases/latest | grep "browser_download_url" | cut -d : -f 2,3 | tr -d \"'); \
+        curl -Lo /tmp/opencart.zip $(curl -s https://api.github.com/repos/opencart/opencart/releases/latest \
+        | grep "browser_download_url" | cut -d : -f 2,3 | tr -d "\""); \
     else \
         curl -Lo /tmp/opencart.zip ${DOWNLOAD_URL}; \
     fi
@@ -37,19 +33,22 @@ RUN if [ -z "$DOWNLOAD_URL" ]; then \
 # Extract OpenCart
 RUN unzip /tmp/opencart.zip -d /tmp/opencart
 
-RUN mv /tmp/opencart/$(if [ -n "$FOLDER" ]; then echo $FOLDER; else unzip -l /tmp/opencart.zip | awk '{print $4}' | grep -E 'opencart-[a-z0-9.]+/upload/$'; fi)* ${DIR_OPENCART}
+# Move upload folder into web root
+RUN mv /tmp/opencart/$(if [ -n "$FOLDER" ]; then echo $FOLDER; \
+        else unzip -l /tmp/opencart.zip | awk '{print $4}' | grep -E 'opencart-[0-9\.]+/upload/$'; \
+        fi)* ${DIR_OPENCART}
 
-# Clean
+# Clean installer (OpenCart 4.x)
 RUN rm -rf /tmp/opencart.zip /tmp/opencart ${DIR_OPENCART}install
 
-# Move storage
-RUN mv ${DIR_OPENCART}system/storage/* /storage
+# OpenCart 4.x does NOT have system/storage — skip move
+RUN echo "OpenCart 4.x detected — skipping move storage step"
 
-# Copy configs + php.ini
+# Copy your config + php.ini
 COPY configs ${DIR_OPENCART}
 COPY upload/php.ini ${PHP_INI_DIR}
 
-# Enable rewrite
+# Enable mod_rewrite for SEO URLs
 RUN a2enmod rewrite
 
 CMD ["apache2-foreground"]
